@@ -2,6 +2,10 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
+
+JNMX3K-Game_based_on_ECS_pattern/Library/
+
+
 .utmp/
 /[Ll]ibrary/
 /[Tt]emp/
