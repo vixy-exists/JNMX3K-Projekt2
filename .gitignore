@@ -4,7 +4,8 @@
 #
 
 JNMX3K-Game_based_on_ECS_pattern/Library/
-
+JNMX3K-Game_based_on_ECS_pattern/Temp/UnityLockfile
+JNMX3K-Game_based_on_ECS_pattern/.vs
 
 .utmp/
 /[Ll]ibrary/
