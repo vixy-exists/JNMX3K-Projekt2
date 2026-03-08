@@ -480,6 +480,11 @@ MonoBehaviour:
   - {fileID: 5468526811750023236, guid: 7c2904cc1afa9ca4aa22af5681ef22c3, type: 3}
   - {fileID: 4918409219737939272, guid: a37f2baf4b1af8c478bfaa5a16b49504, type: 3}
   maxSelectable: 3
+  usePrefabStartPoint: 1
+  startPositions: []
+  startPositionsAreRelative: 1
+  retryAttempts: 100
+  retryDelay: 0.1
   parentToThis: 1
   clearPrevious: 1
 --- !u!1 &1569547712

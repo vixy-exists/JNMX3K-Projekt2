@@ -375,8 +375,8 @@ Tilemap:
   - first: {x: -3, y: -6, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 24
-      m_TileSpriteIndex: 35
+      m_TileIndex: 22
+      m_TileSpriteIndex: 34
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -545,8 +545,8 @@ Tilemap:
   - first: {x: -10, y: -5, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 24
-      m_TileSpriteIndex: 35
+      m_TileIndex: 22
+      m_TileSpriteIndex: 34
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -3448,11 +3448,11 @@ Tilemap:
     m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
+  - m_RefCount: 2
+    m_Data: {fileID: 11400000, guid: a176aff0b91609349be44663c5c7e52d, type: 2}
   - m_RefCount: 79
     m_Data: {fileID: 11400000, guid: 44e3d07023211964ebea896928577f32, type: 2}
-  - m_RefCount: 257
+  - m_RefCount: 255
     m_Data: {fileID: 11400000, guid: b3fd5d8ed83338b46b258b3643774e08, type: 2}
   m_TileSpriteArray:
   - m_RefCount: 0
@@ -3523,9 +3523,9 @@ Tilemap:
     m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 257
+  - m_RefCount: 2
+    m_Data: {fileID: -1248274227, guid: 460c94dfb4617ba4cb55f744fc6ef3ca, type: 3}
+  - m_RefCount: 255
     m_Data: {fileID: 1378646500, guid: 460c94dfb4617ba4cb55f744fc6ef3ca, type: 3}
   - m_RefCount: 79
     m_Data: {fileID: 1278768120, guid: 460c94dfb4617ba4cb55f744fc6ef3ca, type: 3}
@@ -8571,6 +8571,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3918681800998475281}
   - component: {fileID: 467506447895505317}
+  - component: {fileID: 4513569490575932711}
   m_Layer: 0
   m_Name: Dungeon 1
   m_TagString: Untagged
@@ -8607,3 +8608,21 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
+--- !u!114 &4513569490575932711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5974741443717449929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf70263fd27d394f9a21c06e3bc0a48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonStartPoint
+  startX: -76
+  startY: -35
+  isRelative: 1
+  isPrimary: 1
+  dungeonIndex: 1
+  dungeonName: Dungeon 1

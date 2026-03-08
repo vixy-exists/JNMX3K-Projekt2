@@ -1,6 +1,6 @@
 using Unity.Burst;
 using Unity.Entities;
-using UnityEngine;
+using UnityEngine.InputSystem;
 
 [UpdateInGroup(typeof(SimulationSystemGroup))]
 partial struct PlayerInputSystem : ISystem
@@ -13,10 +13,19 @@ partial struct PlayerInputSystem : ISystem
         int dx = 0;
         int dy = 0;
 
-        if (Input.GetKeyDown(KeyCode.W)) dy = 1;
-        if (Input.GetKeyDown(KeyCode.S)) dy = -1;
-        if (Input.GetKeyDown(KeyCode.A)) dx = -1;
-        if (Input.GetKeyDown(KeyCode.D)) dx = 1;
+
+        // Use the new Input System only
+        var kb = Keyboard.current;
+        if (kb == null)
+        {
+            // No keyboard available via the new Input System; nothing to do.
+            return;
+        }
+
+        if (kb.wKey.wasPressedThisFrame || kb.upArrowKey.wasPressedThisFrame) dy = 1;
+        if (kb.sKey.wasPressedThisFrame || kb.downArrowKey.wasPressedThisFrame) dy = -1;
+        if (kb.aKey.wasPressedThisFrame || kb.leftArrowKey.wasPressedThisFrame) dx = -1;
+        if (kb.dKey.wasPressedThisFrame || kb.rightArrowKey.wasPressedThisFrame) dx = 1;
 
         if (dx == 0 && dy == 0)
             return;

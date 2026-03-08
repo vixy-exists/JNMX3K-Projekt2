@@ -585,8 +585,8 @@ Tilemap:
   - first: {x: -6, y: -5, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileIndex: 2
+      m_TileSpriteIndex: 2
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -3095,8 +3095,8 @@ Tilemap:
   - first: {x: 5, y: 5, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
+      m_TileIndex: 2
+      m_TileSpriteIndex: 2
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -3406,13 +3406,17 @@ Tilemap:
   m_TileAssetArray:
   - m_RefCount: 168
     m_Data: {fileID: 11400000, guid: 44e3d07023211964ebea896928577f32, type: 2}
-  - m_RefCount: 168
+  - m_RefCount: 166
     m_Data: {fileID: 11400000, guid: 0d09b259299d2464d8f512a94a6cf202, type: 2}
+  - m_RefCount: 2
+    m_Data: {fileID: 11400000, guid: a176aff0b91609349be44663c5c7e52d, type: 2}
   m_TileSpriteArray:
   - m_RefCount: 168
     m_Data: {fileID: 1278768120, guid: 460c94dfb4617ba4cb55f744fc6ef3ca, type: 3}
-  - m_RefCount: 168
+  - m_RefCount: 166
     m_Data: {fileID: 498943242, guid: 460c94dfb4617ba4cb55f744fc6ef3ca, type: 3}
+  - m_RefCount: 2
+    m_Data: {fileID: -1248274227, guid: 460c94dfb4617ba4cb55f744fc6ef3ca, type: 3}
   m_TileMatrixArray:
   - m_RefCount: 336
     m_Data:
@@ -5918,6 +5922,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3491822985715710778}
   - component: {fileID: 2400034885526014478}
+  - component: {fileID: 7780531202481379419}
   m_Layer: 0
   m_Name: Dungeon 2
   m_TagString: Untagged
@@ -5954,3 +5959,21 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
+--- !u!114 &7780531202481379419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5468526811750023236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf70263fd27d394f9a21c06e3bc0a48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonStartPoint
+  startX: -44
+  startY: -36
+  isRelative: 1
+  isPrimary: 0
+  dungeonIndex: 2
+  dungeonName: Dungeon 2
