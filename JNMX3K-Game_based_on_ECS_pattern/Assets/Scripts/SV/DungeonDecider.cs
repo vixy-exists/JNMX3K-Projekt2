@@ -13,12 +13,8 @@ public struct StartPositionEntry
 public class DungeonDecider : MonoBehaviour
 {
     [Header("Assign dungeon prefabs (each prefab contains both background and walls)")]
-    [Tooltip("Prefabs for full dungeons (background + walls combined).")]
+    [Tooltip("Prefabs for full dungeons.")]
     public GameObject[] dungeonPrefabs;
-
-    [Header("Selection")]
-    [Tooltip("Maximum number of dungeon prefabs that can be selected from (count starts at 1). Clamped to available prefabs.")]
-    public int maxSelectable = 3;
 
     [Header("Player start position")]
     [Tooltip("If true, look for a DungeonStartPoint component inside the instantiated prefab to set player start position. Otherwise use the manual Start Positions array.")]
@@ -65,7 +61,7 @@ public class DungeonDecider : MonoBehaviour
             return;
         }
 
-        int clampedMax = Mathf.Clamp(maxSelectable, 1, available);
+        int clampedMax = Mathf.Clamp(dungeonPrefabs.Length, 1, available);
         int index = Random.Range(0, clampedMax); // zero-based
         LoadDungeon(index);
     }
@@ -96,6 +92,8 @@ public class DungeonDecider : MonoBehaviour
         currentDungeonInstance = Instantiate(prefab, parent);
         currentDungeonInstance.name = GetInstanceName(prefab.name, index);
 
+        var scriptTEST = currentDungeonInstance.GetComponentInChildren<DungeonStartPoint>();
+
         // After instantiating the dungeon, set the player's GridPosition according to configuration
         int absoluteX = 0;
         int absoluteY = 0;
@@ -103,24 +101,31 @@ public class DungeonDecider : MonoBehaviour
 
         if (usePrefabStartPoint)
         {
+            Debug.LogWarning("TEST usePrefabStartPoint.");
             // If prefab contains multiple start points, prefer one that matches the dungeon index/name, then primary, then first
             var startComps = currentDungeonInstance.GetComponentsInChildren<DungeonStartPoint>(true);
             DungeonStartPoint startComp = null;
-            if (startComps != null && startComps.Length > 0)
+            if (startComps.Length > 0)
             {
+                Debug.LogWarning("TEST.");
                 // 1) prefer by explicit dungeonIndex
                 foreach (var s in startComps)
                 {
+                    Debug.LogWarning("TEST explicit dungeonIndex.");
+                    Debug.LogWarning("TEST Index: " + index);
+                    Debug.LogWarning("TEST dungeon index: " + s.dungeonIndex);
                     if (s != null && s.dungeonIndex == index)
                     {
+                        Debug.LogWarning("TEST startcomp-ban van cucc");
                         startComp = s;
                         break;
                     }
                 }
-
+                /*
                 // 2) prefer by dungeonName match with prefab name
                 if (startComp == null)
                 {
+                    Debug.LogWarning("dungeonName match with prefab name.");
                     foreach (var s in startComps)
                     {
                         if (s != null && !string.IsNullOrEmpty(s.dungeonName) && s.dungeonName == prefab.name)
@@ -134,6 +139,7 @@ public class DungeonDecider : MonoBehaviour
                 // 3) prefer explicitly marked primary
                 if (startComp == null)
                 {
+                    Debug.LogWarning("explicitly marked primary.");
                     foreach (var s in startComps)
                     {
                         if (s != null && s.isPrimary)
@@ -146,23 +152,29 @@ public class DungeonDecider : MonoBehaviour
 
                 // 4) fallback to first
                 if (startComp == null)
-                    startComp = startComps[0];
+                { Debug.LogWarning("fallback."); startComp = startComps[0]; }*/
             }
 
             if (startComp != null)
             {
+                Debug.LogWarning("TEST ha startComp-ba rakott valamit");
+
                 // If start is relative, compute absolute by adding dungeon origin (rounded) to offset
                 if (startComp.isRelative)
                 {
+                    Debug.LogWarning("TEST startComp is relative.");
                     var origin = currentDungeonInstance.transform.position;
                     absoluteX = Mathf.RoundToInt(origin.x) + startComp.startX;
                     absoluteY = Mathf.RoundToInt(origin.y) + startComp.startY;
                 }
                 else
                 {
+                    Debug.LogWarning("TEST startcomp not relative");
                     absoluteX = startComp.startX;
                     absoluteY = startComp.startY;
                 }
+                Debug.LogWarning("x and y: " + absoluteX + " + " + absoluteY);
+                Debug.LogWarning("TEST haveStart az már igaz");
                 haveStart = true;
             }
             else
@@ -174,6 +186,7 @@ public class DungeonDecider : MonoBehaviour
         {
             if (startPositions != null && index < startPositions.Length)
             {
+                Debug.LogWarning("bruh else");
                 var sp = startPositions[index];
                 if (startPositionsAreRelative)
                 {
@@ -194,17 +207,12 @@ public class DungeonDecider : MonoBehaviour
             }
         }
 
+        SetPlayerGridPositionImmediate(absoluteX, absoluteY);
+
         if (haveStart)
         {
-            // Cancel any previous coroutine that might still be trying to set the player's position
-            if (setPositionCoroutine != null)
-            {
-                try { StopCoroutine(setPositionCoroutine); } catch { }
-                setPositionCoroutine = null;
-            }
-
-            // Start a coroutine to retry setting player GridPosition in case the player entity isn't created yet
-            setPositionCoroutine = StartCoroutine(TrySetPlayerGridPositionWithRetry(absoluteX, absoluteY));
+            // Ensure a player entity exists and set its GridPosition (create entity if necessary)
+            //EnsurePlayerEntityAt(absoluteX, absoluteY);
         }
     }
 
@@ -225,7 +233,7 @@ public class DungeonDecider : MonoBehaviour
         var em = world.EntityManager;
         var query = em.CreateEntityQuery(new EntityQueryDesc
         {
-            All = new ComponentType[] { typeof(GridPosition), typeof(PlayerTag) }
+            All = new ComponentType[] { typeof(GridPosition), typeof(Player) }
         });
 
         using (var entities = query.ToEntityArray(Allocator.Temp))
@@ -254,7 +262,7 @@ public class DungeonDecider : MonoBehaviour
         var em = world.EntityManager;
         var query = em.CreateEntityQuery(new EntityQueryDesc
         {
-            All = new ComponentType[] { typeof(GridPosition), typeof(PlayerTag) }
+            All = new ComponentType[] { typeof(GridPosition), typeof(Player) }
         });
 
         using (var entities = query.ToEntityArray(Allocator.Temp))
@@ -270,7 +278,53 @@ public class DungeonDecider : MonoBehaviour
                     return true;
                 }
 
-                var bakerAuthoring = FindObjectOfType<PlayerBaker>();
+    /// <summary>
+    /// Ensure a player entity exists and set its GridPosition. If no entity exists, create one.
+    /// </summary>
+    void EnsurePlayerEntityAt(int x, int y)
+    {
+        var world = World.DefaultGameObjectInjectionWorld;
+        if (world == null)
+        {
+            Debug.LogWarning("DungeonDecider: No Default World available to ensure player entity.");
+            return;
+        }
+
+        var em = world.EntityManager;
+        var query = em.CreateEntityQuery(new EntityQueryDesc
+        {
+            All = new ComponentType[] { typeof(Player) }
+        });
+
+        using (var entities = query.ToEntityArray(Allocator.Temp))
+        {
+            if (entities.Length == 0)
+            {
+                // Create a new player entity with GridPosition and MoveIntent
+                var entity = em.CreateEntity(typeof(Player), typeof(GridPosition), typeof(MoveIntent));
+                em.SetComponentData(entity, new GridPosition { x = x, y = y });
+                em.SetComponentData(entity, new MoveIntent { DirectionX = 0, DirectionY = 0 });
+                Debug.Log($"DungeonDecider: Created player entity at ({x},{y}).");
+                return;
+            }
+
+            // Set GridPosition for existing player entities
+            foreach (var e in entities)
+            {
+                if (em.HasComponent<GridPosition>(e))
+                    em.SetComponentData(e, new GridPosition { x = x, y = y });
+                else
+                    em.AddComponentData(e, new GridPosition { x = x, y = y });
+
+                if (!em.HasComponent<MoveIntent>(e))
+                    em.AddComponentData(e, new MoveIntent { DirectionX = 0, DirectionY = 0 });
+            }
+
+            Debug.Log($"DungeonDecider: Set existing player entity(ies) GridPosition to ({x},{y}).");
+        }
+    }
+
+                var bakerAuthoring = FindObjectOfType<PlayerAuthoring>();
                 if (bakerAuthoring != null)
                 {
                     bakerAuthoring.transform.position = new Vector3(x, y, bakerAuthoring.transform.position.z);

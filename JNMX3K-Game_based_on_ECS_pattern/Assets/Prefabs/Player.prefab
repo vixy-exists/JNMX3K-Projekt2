@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6796492350531105545}
   - component: {fileID: 3600854299155790160}
   - component: {fileID: 8966805976043705018}
-  - component: {fileID: 2021928913093356426}
+  - component: {fileID: 5008836076390885437}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -190,7 +190,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.2, y: 0.2}
   m_EdgeRadius: 0
---- !u!114 &2021928913093356426
+--- !u!114 &5008836076390885437
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -199,9 +199,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1213054100022946606}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ffa777a6606739b40aa2ad08998b04a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 131ad5678dc4c354786a55c99ec1dd97, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerBaker
-  overrideStartGrid: 0
-  startX: 0
-  startY: 0
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAuthoring
