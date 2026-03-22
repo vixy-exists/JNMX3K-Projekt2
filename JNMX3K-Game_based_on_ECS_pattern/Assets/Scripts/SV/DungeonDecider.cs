@@ -1,7 +1,9 @@
-using UnityEngine;
 using System.Collections;
-using Unity.Entities;
 using Unity.Collections;
+using Unity.Entities;
+using Unity.Mathematics;
+using Unity.Transforms;
+using UnityEngine;
 
 [System.Serializable]
 public struct StartPositionEntry
@@ -62,7 +64,7 @@ public class DungeonDecider : MonoBehaviour
         }
 
         int clampedMax = Mathf.Clamp(dungeonPrefabs.Length, 1, available);
-        int index = Random.Range(0, clampedMax); // zero-based
+        int index = UnityEngine.Random.Range(0, clampedMax); // zero-based
         LoadDungeon(index);
     }
 
@@ -101,22 +103,18 @@ public class DungeonDecider : MonoBehaviour
 
         if (usePrefabStartPoint)
         {
-            Debug.LogWarning("TEST usePrefabStartPoint.");
             // If prefab contains multiple start points, prefer one that matches the dungeon index/name, then primary, then first
             var startComps = currentDungeonInstance.GetComponentsInChildren<DungeonStartPoint>(true);
             DungeonStartPoint startComp = null;
             if (startComps.Length > 0)
             {
-                Debug.LogWarning("TEST.");
                 // 1) prefer by explicit dungeonIndex
                 foreach (var s in startComps)
                 {
-                    Debug.LogWarning("TEST explicit dungeonIndex.");
-                    Debug.LogWarning("TEST Index: " + index);
-                    Debug.LogWarning("TEST dungeon index: " + s.dungeonIndex);
+                    Debug.Log("TEST Index: " + index);
+                    Debug.Log("TEST dungeon index: " + s.dungeonIndex);
                     if (s != null && s.dungeonIndex == index)
                     {
-                        Debug.LogWarning("TEST startcomp-ban van cucc");
                         startComp = s;
                         break;
                     }
@@ -125,7 +123,6 @@ public class DungeonDecider : MonoBehaviour
                 // 2) prefer by dungeonName match with prefab name
                 if (startComp == null)
                 {
-                    Debug.LogWarning("dungeonName match with prefab name.");
                     foreach (var s in startComps)
                     {
                         if (s != null && !string.IsNullOrEmpty(s.dungeonName) && s.dungeonName == prefab.name)
@@ -139,7 +136,6 @@ public class DungeonDecider : MonoBehaviour
                 // 3) prefer explicitly marked primary
                 if (startComp == null)
                 {
-                    Debug.LogWarning("explicitly marked primary.");
                     foreach (var s in startComps)
                     {
                         if (s != null && s.isPrimary)
@@ -152,29 +148,24 @@ public class DungeonDecider : MonoBehaviour
 
                 // 4) fallback to first
                 if (startComp == null)
-                { Debug.LogWarning("fallback."); startComp = startComps[0]; }*/
+                { startComp = startComps[0]; }*/
             }
 
             if (startComp != null)
             {
-                Debug.LogWarning("TEST ha startComp-ba rakott valamit");
-
                 // If start is relative, compute absolute by adding dungeon origin (rounded) to offset
                 if (startComp.isRelative)
                 {
-                    Debug.LogWarning("TEST startComp is relative.");
                     var origin = currentDungeonInstance.transform.position;
                     absoluteX = Mathf.RoundToInt(origin.x) + startComp.startX;
                     absoluteY = Mathf.RoundToInt(origin.y) + startComp.startY;
                 }
                 else
                 {
-                    Debug.LogWarning("TEST startcomp not relative");
                     absoluteX = startComp.startX;
                     absoluteY = startComp.startY;
                 }
-                Debug.LogWarning("x and y: " + absoluteX + " + " + absoluteY);
-                Debug.LogWarning("TEST haveStart az már igaz");
+                Debug.Log("x and y: " + absoluteX + " + " + absoluteY);
                 haveStart = true;
             }
             else
@@ -186,7 +177,6 @@ public class DungeonDecider : MonoBehaviour
         {
             if (startPositions != null && index < startPositions.Length)
             {
-                Debug.LogWarning("bruh else");
                 var sp = startPositions[index];
                 if (startPositionsAreRelative)
                 {
@@ -212,7 +202,7 @@ public class DungeonDecider : MonoBehaviour
         if (haveStart)
         {
             // Ensure a player entity exists and set its GridPosition (create entity if necessary)
-            //EnsurePlayerEntityAt(absoluteX, absoluteY);
+            EnsurePlayerEntityAt(absoluteX, absoluteY);
         }
     }
 
@@ -252,32 +242,6 @@ public class DungeonDecider : MonoBehaviour
         }
     }
 
-    // Returns true if player entity was found and position set
-    bool SetPlayerGridPosition(int x, int y)
-    {
-        var world = World.DefaultGameObjectInjectionWorld;
-        if (world == null)
-            return false;
-
-        var em = world.EntityManager;
-        var query = em.CreateEntityQuery(new EntityQueryDesc
-        {
-            All = new ComponentType[] { typeof(GridPosition), typeof(Player) }
-        });
-
-        using (var entities = query.ToEntityArray(Allocator.Temp))
-        {
-            if (entities.Length == 0)
-            {
-                // No ECS player entity found — try GameObject fallbacks
-                var goByTag = GameObject.FindWithTag("Player");
-                if (goByTag != null)
-                {
-                    goByTag.transform.position = new Vector3(x, y, goByTag.transform.position.z);
-                    Debug.Log($"DungeonDecider: Set GameObject Player transform to ({x},{y}).");
-                    return true;
-                }
-
     /// <summary>
     /// Ensure a player entity exists and set its GridPosition. If no entity exists, create one.
     /// </summary>
@@ -312,9 +276,15 @@ public class DungeonDecider : MonoBehaviour
             foreach (var e in entities)
             {
                 if (em.HasComponent<GridPosition>(e))
+                {
                     em.SetComponentData(e, new GridPosition { x = x, y = y });
+                    em.SetComponentData(e, new LocalTransform { Position = new float3(x, y, 0), Scale = 1 });
+                }
                 else
+                {
                     em.AddComponentData(e, new GridPosition { x = x, y = y });
+                    em.AddComponentData(e, new LocalTransform { Position = new float3(x, y, 0), Scale = 8 });
+                }
 
                 if (!em.HasComponent<MoveIntent>(e))
                     em.AddComponentData(e, new MoveIntent { DirectionX = 0, DirectionY = 0 });
@@ -322,43 +292,6 @@ public class DungeonDecider : MonoBehaviour
 
             Debug.Log($"DungeonDecider: Set existing player entity(ies) GridPosition to ({x},{y}).");
         }
-    }
-
-                var bakerAuthoring = FindObjectOfType<PlayerAuthoring>();
-                if (bakerAuthoring != null)
-                {
-                    bakerAuthoring.transform.position = new Vector3(x, y, bakerAuthoring.transform.position.z);
-                    Debug.Log($"DungeonDecider: Set PlayerBaker GameObject transform to ({x},{y}).");
-                    return true;
-                }
-
-                return false;
-            }
-
-            foreach (var e in entities)
-            {
-                em.SetComponentData(e, new GridPosition { x = x, y = y });
-            }
-        }
-
-        Debug.Log($"DungeonDecider: Set ECS Player GridPosition to ({x},{y}).");
-
-        return true;
-    }
-
-    IEnumerator TrySetPlayerGridPositionWithRetry(int x, int y)
-    {
-        int attempts = 0;
-        while (attempts < retryAttempts)
-        {
-            if (SetPlayerGridPosition(x, y))
-                yield break;
-
-            attempts++;
-            yield return new WaitForSeconds(retryDelay);
-        }
-
-        Debug.LogWarning("DungeonDecider: Failed to set player GridPosition after retries.");
     }
 
     /// <summary>
