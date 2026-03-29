@@ -34,7 +34,7 @@ public class PlayerAuthoring : MonoBehaviour
             var entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent<Player>(entity);
             AddComponent(entity, new GridMoveRe { IsMoving = false });
-            AddComponent(entity, new GridPosition { x = 0, y = 0 });
+            AddComponent(entity, new GridPosition { Value = new int2(0, 0) });
 
             // Randomize stats within ranges (inclusive for ints)
             var stats = new Stats

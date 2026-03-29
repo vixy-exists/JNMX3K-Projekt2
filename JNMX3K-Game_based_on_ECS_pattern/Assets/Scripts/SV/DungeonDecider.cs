@@ -236,7 +236,7 @@ public class DungeonDecider : MonoBehaviour
             {
                 foreach (var e in entities)
                 {
-                    em.SetComponentData(e, new GridPosition { x = x, y = y });
+                    em.SetComponentData(e, new GridPosition { Value = new int2(x, y) });
                 }
             }
         }
@@ -266,7 +266,7 @@ public class DungeonDecider : MonoBehaviour
             {
                 // Create a new player entity with GridPosition and MoveIntent
                 var entity = em.CreateEntity(typeof(Player), typeof(GridPosition), typeof(MoveIntent));
-                em.SetComponentData(entity, new GridPosition { x = x, y = y });
+                em.SetComponentData(entity, new GridPosition { Value = new int2 (x, y) });
                 em.SetComponentData(entity, new MoveIntent { DirectionX = 0, DirectionY = 0 });
                 Debug.Log($"DungeonDecider: Created player entity at ({x},{y}).");
                 return;
@@ -277,12 +277,12 @@ public class DungeonDecider : MonoBehaviour
             {
                 if (em.HasComponent<GridPosition>(e))
                 {
-                    em.SetComponentData(e, new GridPosition { x = x, y = y });
+                    em.SetComponentData(e, new GridPosition { Value = new int2(x, y) });
                     em.SetComponentData(e, new LocalTransform { Position = new float3(x, y, 0), Scale = 1 });
                 }
                 else
                 {
-                    em.AddComponentData(e, new GridPosition { x = x, y = y });
+                    em.AddComponentData(e, new GridPosition { Value = new int2(x, y) });
                     em.AddComponentData(e, new LocalTransform { Position = new float3(x, y, 0), Scale = 8 });
                 }
 

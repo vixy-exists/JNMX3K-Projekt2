@@ -1,7 +1,7 @@
 using Unity.Entities;
+using Unity.Mathematics;
 
 public struct GridPosition : IComponentData
 {
-    public int x;
-    public int y;
+    public int2 Value;
 }
