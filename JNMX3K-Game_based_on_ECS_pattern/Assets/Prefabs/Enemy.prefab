@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7267708689687544037}
   - component: {fileID: -2959505502867955022}
   - component: {fileID: 6893179044068417686}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -206,3 +206,24 @@ MonoBehaviour:
   startX: 0
   startY: 0
   addLocalTransform: 1
+  levelRange:
+    min: 1
+    max: 1
+  hpRange:
+    min: 10
+    max: 20
+  mpRange:
+    min: 0
+    max: 5
+  strengthRange:
+    min: 1
+    max: 5
+  speedRange:
+    min: 1
+    max: 5
+  intRange:
+    min: 1
+    max: 5
+  defenseRange:
+    min: 0
+    max: 5

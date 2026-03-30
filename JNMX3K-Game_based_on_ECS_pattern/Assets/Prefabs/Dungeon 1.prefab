@@ -3530,7 +3530,7 @@ GameObject:
   - component: {fileID: 3611431568393559831}
   - component: {fileID: 9062497888526805675}
   - component: {fileID: 4507634568698685280}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: DG2Walls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
