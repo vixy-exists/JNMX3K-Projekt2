@@ -1,4 +1,4 @@
-using Unity.Entities;
+/*using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
 
@@ -15,4 +15,4 @@ public partial class GridMoveInstantSystem : SystemBase
             }
         }).Schedule();
     }
-}
+}*/

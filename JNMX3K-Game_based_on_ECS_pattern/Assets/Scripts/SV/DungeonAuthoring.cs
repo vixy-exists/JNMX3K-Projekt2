@@ -2,13 +2,12 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class WallAuthoring : MonoBehaviour
+public class DungeonAuthoring : MonoBehaviour
 {
-    public class Baker : Baker<WallAuthoring>
+    public class Baker : Baker<DungeonAuthoring>
     {
-        public override void Bake(WallAuthoring authoring)
+        public override void Bake(DungeonAuthoring authoring)
         {
-            var child = authoring.transform.Find("Walls");
             var entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent<WallTag>(entity);
         }

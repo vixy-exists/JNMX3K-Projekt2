@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6519974556582337944}
   - component: {fileID: 9156608144091113103}
   m_Layer: 0
-  m_Name: DG1Background
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4881,7 +4881,7 @@ GameObject:
   - component: {fileID: 9033261348939318749}
   - component: {fileID: 4648368720346200984}
   m_Layer: 6
-  m_Name: DG1Walls (1)
+  m_Name: Walls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
