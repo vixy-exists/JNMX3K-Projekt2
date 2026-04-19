@@ -1,4 +1,4 @@
-using Unity.Collections;
+/*using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 
@@ -31,4 +31,4 @@ public partial struct MovementSystem : ISystem
 
         wallPositions.Dispose();
     }
-}
+}*/
